@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的恋爱日记 ❤️</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffe6e6 0%, #ffcccc 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+            overflow: hidden;
+            border: 3px solid #ff6699;
+        }
+        
+        /* 头部 */
+        .header {
+            background: linear-gradient(to right, #ff6699, #ff3366);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        /* 恋爱计时器 */
+        .counter {
+            background: white;
+            margin: 20px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px dashed #ff6699;
+        }
+        
+        .counter h2 {
+            color: #ff3366;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        #love-days {
+            font-size: 3.5em;
+            color: #ff3366;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 2px 2px 4px rgba(255, 51, 102, 0.2);
+        }
+        
+        .date-input {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid #ff6699;
+            border-radius: 10px;
+            font-size: 1.1em;
+            width: 200px;
+            text-align: center;
+        }
+        
+        /* 功能区域 */
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 2px solid #ffcccc;
+        }
+        
+        .section h3 {
+            color: #ff3366;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #ffe6e6;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section h3 i {
+            color: #ff6699;
+        }
+        
+        /* 纪念日 */
+        .anniversary-item {
+            background: #fff5f5;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #ff6699;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+        
+        .anniversary-item:hover {
+            transform: translateX(5px);
+            background: #fff0f0;
+        }
+        
+        /* 日记输入 */
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid #ffcccc;
+            border-radius: 10px;
+            font-size: 1em;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #ff6699;
+            box-shadow: 0 0 0 3px rgba(255, 102, 153, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #ff6699, #ff3366);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(255, 51, 102, 0.3);
+        }
+        
+        /* 照片墙 */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .photo {
+            width: 100%;
+            height: 100px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            border: 2px dashed #ffcccc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .photo:hover {
+            background: #ffe6e6;
+            color: #ff6699;
+        }
+        
+        /* 日记列表 */
+        .diary-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .diary-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6699;
+        }
+        
+        .diary-date {
+            color: #ff6699;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .diary-content {
+            line-height: 1.6;
+        }
+        
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            background: #fff5f5;
+            color: #ff6699;
+            border-top: 2px solid #ffe6e6;
+            font-size: 1.1em;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .sections {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            #love-days {
+                font-size: 2.8em;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* 爱心动画 */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <!-- 漂浮的爱心 -->
+            <div class="heart" style="top:10%; left:10%;">❤️</div>
+            <div class="heart" style="top:20%; right:15%;">❤️</div>
+            <div class="heart" style="bottom:30%; left:20%;">❤️</div>
+            
+            <h1><i class="fas fa-heart"></i> 我们的恋爱日记 <i class="fas fa-heart"></i></h1>
+            <p>记录我们在一起的每一个美好瞬间</p>
+        </div>
+        
+        <!-- 恋爱计时器 -->
+        <div class="counter">
+            <h2><i class="far fa-calendar-alt"></i> 我们在一起</h2>
+            <div id="love-days">0 天</div>
+            <p>每一分每一秒都值得珍惜</p>
+            
+            <div style="margin-top: 20px;">
+                <label for="start-date">选择恋爱开始日期：</label><br>
+                <input type="date" id="start-date" class="date-input">
+                <button onclick="saveStartDate()" class="btn" style="margin-left: 10px;">
+                    <i class="fas fa-save"></i> 保存日期
+                </button>
+            </div>
+        </div>
+        
+        <!-- 功能区域 -->
+        <div class="sections">
+            <!-- 纪念日 -->
+            <div class="section">
+                <h3><i class="fas fa-gift"></i> 重要纪念日</h3>
+                <div id="anniversaries">
+                    <div class="anniversary-item">
+                        <span>💕 第一个月</span>
+                        <span id="month1">已过</span>
+                    </div>
+                    <div class="anniversary-item">
+                        <span>💖 第100天</span>
+                        <span id="day100">已过</span>
+                    </div>
+                    <div class="anniversary-item">
+                        <span>🎉 第一年</span>
+                        <span id="year1">还有XX天</span>
+                    </div>
+                    <div class="anniversary-item">
+                        <span>🎂 你的生日</span>
+                        <span><input type="date" id="birthday1" class="date-input" style="width:140px; padding:5px;"></span>
+                    </div>
+                    <div class="anniversary-item">
+                        <span>🎂 TA的生日</span>
+                        <span><input type="date" id="birthday2" class="date-input" style="width:140px; padding:5px;"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 写日记 -->
+            <div class="section">
+                <h3><i class="fas fa-book"></i> 写日记</h3>
+                <textarea id="diary-content" placeholder="记录今天的美好时刻..."></textarea>
+                <button onclick="addDiary()" class="btn">
+                    <i class="fas fa-feather-alt"></i> 保存日记
+                </button>
+                
+                <div class="diary-list" id="diary-list">
+                    <!-- 日记会显示在这里 -->
+                    <div class="diary-item">
+                        <div class="diary-date">2024年1月1日</div>
+                        <div class="diary-content">这是我们恋爱日记的第一篇！🥰</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 照片墙 -->
+            <div class="section">
+                <h3><i class="fas fa-images"></i> 我们的照片墙</h3>
+                <p>上传我们的美好回忆（需要网络版才能保存）</p>
+                <div class="gallery">
+                    <div class="photo" onclick="addPhoto()">
+                        <i class="fas fa-plus"></i> 添加照片
+                    </div>
+                    <div class="photo" style="background:#ffe6e6;">合照1</div>
+                    <div class="photo" style="background:#ffe6e6;">合照2</div>
+                    <div class="photo" style="background:#ffe6e6;">纪念日</div>
+                    <div class="photo" style="background:#ffe6e6;">旅行</div>
+                    <div class="photo" style="background:#ffe6e6;">日常</div>
+                </div>
+            </div>
+            
+            <!-- 愿望清单 -->
+            <div class="section">
+                <h3><i class="fas fa-star"></i> 我们的愿望清单</h3>
+                <div style="margin-bottom: 15px;">
+                    <input type="text" id="wish-input" placeholder="添加一个共同愿望..." 
+                           style="width:70%; padding:10px; border:2px solid #ffcccc; border-radius:8px;">
+                    <button onclick="addWish()" class="btn" style="margin-left:10px;">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div id="wish-list">
+                    <div style="padding:10px; background:#f0f8ff; margin:5px 0; border-radius:8px; display:flex; align-items:center;">
+                        <input type="checkbox" style="margin-right:10px;">
+                        <span>一起去海边看日出 🌅</span>
+                    </div>
+                    <div style="padding:10px; background:#f0f8ff; margin:5px 0; border-radius:8px; display:flex; align-items:center;">
+                        <input type="checkbox" style="margin-right:10px;">
+                        <span>一起做一顿浪漫晚餐 🍽️</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部 -->
+        <div class="footer">
+            <p>❤️ 用心记录我们的爱情，让每一天都充满甜蜜 ❤️</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                数据保存在本地浏览器中 | 分享给TA: 
+                <button onclick="sharePage()" class="btn" style="padding:8px 15px; font-size:0.9em; margin-left:10px;">
+                    <i class="fas fa-share-alt"></i> 分享此页面
+                </button>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载时执行
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStartDate();
+            updateLoveDays();
+            loadDiaries();
+            
+            // 设置默认日期
+            let today = new Date();
+            let tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 100);
+            let nextYear = new Date();
+            nextYear.setFullYear(today.getFullYear() + 1);
+            
+            // 设置纪念日
+            document.getElementById('day100').textContent = formatDate(tomorrow);
+            document.getElementById('year1').textContent = formatDate(nextYear);
+        });
+        
+        // 保存恋爱开始日期
+        function saveStartDate() {
+            const startDate = document.getElementById('start-date').value;
+            if (startDate) {
+                localStorage.setItem('loveStartDate', startDate);
+                updateLoveDays();
+                alert('日期保存成功！💖');
+            } else {
+                alert('请先选择日期哦！');
+            }
+        }
+        
+        // 加载恋爱开始日期
+        function loadStartDate() {
+            const savedDate = localStorage.getItem('loveStartDate');
+            if (savedDate) {
+                document.getElementById('start-date').value = savedDate;
+            } else {
+                // 默认设置为3个月前
+                let defaultDate = new Date();
+                defaultDate.setMonth(defaultDate.getMonth() - 3);
+                let defaultDateStr = defaultDate.toISOString().split('T')[0];
+                document.getElementById('start-date').value = defaultDateStr;
+                localStorage.setItem('loveStartDate', defaultDateStr);
+            }
+        }
+        
+        // 计算恋爱天数
+        function updateLoveDays() {
+            const startDateStr = localStorage.getItem('loveStartDate');
+            if (!startDateStr) return;
+            
+            const startDate = new Date(startDateStr);
+            const today = new Date();
+            
+            // 计算天数差
+            const timeDiff = today.getTime() - startDate.getTime();
+            const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+            
+            // 更新显示
+            document.getElementById('love-days').textContent = daysDiff + ' 天';
+            
+            // 更新纪念日
+            updateAnniversaries(startDate, daysDiff);
+        }
+        
+        // 更新纪念日
+        function updateAnniversaries(startDate, days) {
+            // 第一个月
+            const month1 = new Date(startDate);
+            month1.setMonth(month1.getMonth() + 1);
+            const month1Diff = Math.floor((new Date() - month1) / (1000 * 3600 * 24));
+            
+            if (month1Diff >= 0) {
+                document.getElementById('month1').textContent = month1Diff + ' 天前';
+            } else {
+                document.getElementById('month1').textContent = '还有 ' + Math.abs(month1Diff) + ' 天';
+            }
+            
+            // 第100天
+            const day100 = new Date(startDate);
+            day100.setDate(day100.getDate() + 100);
+            const day100Diff = Math.floor((new Date() - day100) / (1000 * 3600 * 24));
+            
+            if (day100Diff >= 0) {
+                document.getElementById('day100').textContent = day100Diff + ' 天前';
+            } else {
+                document.getElementById('day100').textContent = '还有 ' + Math.abs(day100Diff) + ' 天';
+            }
+            
+            // 第一年
+            const year1 = new Date(startDate);
+            year1.setFullYear(year1.getFullYear() + 1);
+            const year1Diff = Math.floor((new Date() - year1) / (1000 * 3600 * 24));
+            
+            if (year1Diff >= 0) {
+                document.getElementById('year1').textContent = year1Diff + ' 天前';
+            } else {
+                document.getElementById('year1').textContent = '还有 ' + Math.abs(year1Diff) + ' 天';
+            }
+        }
+        
+        // 添加日记
+        function addDiary() {
+            const content = document.getElementById('diary-content').value;
+            if (!content.trim()) {
+                alert('写点什么再保存吧！');
+                return;
+            }
+            
+            const now = new Date();
+            const dateStr = formatDate(now);
+            const diary = { date: dateStr, content: content };
+            
+            // 保存到本地存储
+            let diaries = JSON.parse(localStorage.getItem('loveDiaries') || '[]');
+            diaries.unshift(diary); // 添加到开头
+            localStorage.setItem('loveDiaries', JSON.stringify(diaries));
+            
+            // 清空输入框
+            document.getElementById('diary-content').value = '';
+            
+            // 重新加载日记列表
+            loadDiaries();
+            
+            alert('日记保存成功！📖');
+        }
+        
+        // 加载日记
+        function loadDiaries() {
+            const diaries = JSON.parse(localStorage.getItem('loveDiaries') || '[]');
+            const diaryList = document.getElementById('diary-list');
+            
+            if (diaries.length === 0) {
+                diaryList.innerHTML = '<div class="diary-item"><div class="diary-date">还没有日记哦</div><div class="diary-content">点击上方写一篇吧！</div></div>';
+                return;
+            }
+            
+            diaryList.innerHTML = '';
+            diaries.forEach(diary => {
+                const diaryItem = document.createElement('div');
+                diaryItem.className = 'diary-item';
+                diaryItem.innerHTML = `
+                    <div class="diary-date">${diary.date}</div>
+                    <div class="diary-content">${diary.content}</div>
+                `;
+                diaryList.appendChild(diaryItem);
+            });
+        }
+        
+        // 添加照片
+        function addPhoto() {
+            alert('在线版本需要后端支持才能上传真实照片。\n\n不过你可以：\n1. 修改代码中的图片URL\n2. 使用网络相册链接\n3. 或将照片放在同一文件夹中');
+        }
+        
+        // 添加愿望
+        function addWish() {
+            const wishInput = document.getElementById('wish-input');
+            const wish = wishInput.value.trim();
+            
+            if (!wish) {
+                alert('输入一个愿望吧！');
+                return;
+            }
+            
+            const wishList = document.getElementById('wish-list');
+            const wishItem = document.createElement('div');
+            wishItem.style.cssText = 'padding:10px; background:#f0f8ff; margin:5px 0; border-radius:8px; display:flex; align-items:center;';
+            wishItem.innerHTML = `
+                <input type="checkbox" style="margin-right:10px;" onchange="toggleWish(this)">
+                <span>${wish}</span>
+            `;
+            
+            wishList.appendChild(wishItem);
+            wishInput.value = '';
+            
+            // 保存愿望
+            saveWishes();
+        }
+        
+        // 切换愿望完成状态
+        function toggleWish(checkbox) {
+            const wishText = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                wishText.style.textDecoration = 'line-through';
+                wishText.style.color = '#999';
+            } else {
+                wishText.style.textDecoration = 'none';
+                wishText.style.color = '#333';
+            }
+            saveWishes();
+        }
+        
+        // 保存愿望
+        function saveWishes() {
+            // 这里简化处理，实际项目可以保存到localStorage
+        }
+        
+        // 分享页面
+        function sharePage() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '我们的恋爱日记',
+                    text: '来看看我们的恋爱日记吧！',
+                    url: window.location.href
+                });
+            } else {
+                // 复制链接到剪贴板
+                navigator.clipboard.writeText(window.location.href)
+                    .then(() => alert('链接已复制到剪贴板！发送给TA吧！💌'))
+                    .catch(() => alert('请手动复制链接分享给TA：' + window.location.href));
+            }
+        }
+        
+        // 格式化日期
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}年${month}月${day}日`;
+        }
+        
+        // 每天自动更新天数
+        setInterval(updateLoveDays, 60000); // 每分钟检查一次
+    </script>
+</body>
+</html>
